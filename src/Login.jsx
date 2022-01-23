@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Link} from "react-router-dom";
 
-import { Box, Button, Grid, TextField } from '@mui/material';
+import { Paper, Button, Grid, TextField, Typography } from '@mui/material';
 
 export default function Login() {
 
@@ -9,38 +9,61 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   return (
-    <Box>
-      <Grid container spacing={3}>
+      <Grid container alignItems="center"
+      justifyContent="center" pt={3}>
         <Grid item xs={8}>
-          <h1>Login</h1>
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            required
-            id="outlined-required"
-            label="Email"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            required
-            id="outlined-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            fullWidth
-          />
-        </Grid>
+          <Paper>
+            <Grid 
+              container 
+              spacing={4} 
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Grid item xs={8}>
+                <Typography 
+                  variant='h4' 
+                  color='primary'
+                  fontWeight='900'
+                >
+                  Login
+                </Typography>
+              </Grid>
+            <Grid item xs={8}>
+              <TextField
+                id="outlined-basic"
+                label="Email"
+                fullWidth
+                color="primary"
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <TextField
+                id="outlined-password-input"
+                label="Password"
+                type="password"
+                fullWidth
+                color="primary"
+              />
+            </Grid>
+          </Grid>
+          <Grid 
+              container 
+              spacing={3} 
+              alignItems="center"
+              justifyContent="center"
+              pt={4}
+              pb={4}
+            >
+            <Grid item xs={4} >
+              <Button variant="contained" disableElevation style={{backgroundColor: "#76b900"}} >Login</Button>
+            </Grid>
+            <Grid item xs={4} >
+              <Button variant="outlined" component={Link} to={'/'}>Cancel</Button>
+            </Grid>
+          </Grid>
+        </Paper>
       </Grid>
-      <Grid container spacing={3} pt={3}>
-        <Grid item xs={4} >
-          <Button variant="outlined" component={Link} to={'/'}>Cancel</Button>
-        </Grid>
-        <Grid item xs={4} >
-          <Button variant="contained" disableElevation >Login</Button>
-        </Grid>
-      </Grid>
-    </Box>
+    </Grid>
+ 
   );
 }

@@ -1,6 +1,7 @@
+import {useState} from 'react';
+
 import { Link } from "react-router-dom";
 
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,8 +14,8 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
 const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -81,7 +82,7 @@ const Navbar = () => {
                   <Typography textAlign="center">Admin</Typography>
                 </MenuItem>
               
-                <MenuItem key='adminEdit' component={Link} to={'/admin/edit'} onClick={handleCloseNavMenu}>
+                <MenuItem key='adminEdit' component={Link} to={'/edit'} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Edit</Typography>
                 </MenuItem>
               </Menu>
@@ -113,7 +114,7 @@ const Navbar = () => {
               </Button>
               <Button
                 key='adminEdit'
-                component={Link} to={'/admin/edit'}
+                component={Link} to={'/edit'}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
