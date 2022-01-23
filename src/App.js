@@ -7,12 +7,10 @@ import {
 import { Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Admin from "./Admin";
 import Edit from "./Edit";
-import Login from "./Login";
 import Home from "./Home";
+import Login from "./Login";
 import Navbar from "./Navbar";
-import New from "./New";
 
 import './App.css';
 
@@ -41,7 +39,6 @@ export default function App() {
         <Box p={3} sx={{ backgroundColor:"secondary.main"}}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="/edit" element={ <Edit />} />
             <Route path="/login" element={<Login />} />
           </Routes>

@@ -1,10 +1,12 @@
 import {useEffect, useState} from 'react';
+import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
 import AWS from 'aws-sdk'
 
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
-import { Paper, Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
+import { Paper, Button, Grid, InputAdornment, TextField, Typography, getImageListItemBarUtilityClass } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ImageIcon from '@mui/icons-material/AddPhotoAlternate';
 
@@ -21,47 +23,93 @@ const myBucket = new AWS.S3({
   region: REGION,
 })
 
+const baseURL = process.env.REACT_APP_DYNAMO_DB_URL
+
 export default function Edit() {
 
   const location = useLocation();
+  let navigate = useNavigate();
 
-  const [params, setParams] = useState(null);
-  const [articleId, setArticleId] = useState(null);
+  const [id, setId] = useState('');
+  const [articleId, setArticleId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [imageTitle, setImageTitle] = useState('');
   const [loadingState, setLoadingState] = useState(false);
   const [progress , setProgress] = useState(0);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     setArticleId(queryParams.get('articleId'));
   }, [])
-  const handleFileInput = (e) => {
-    setSelectedFile(e.target.files[0]);
-}
 
-const uploadFile = (file) => {
+  useEffect(() => {
+    console.log('articleId: ', articleId);
+    if(articleId){
+      console.log('fetching article ', articleId);
+      axios.get(baseURL + 'article/' + articleId).then((response) => {
+        console.log('response,', response.data);
+        setId(response.data.Item.id);
+        setTitle(response.data.Item.title);
+        setDescription(response.data.Item.description);
+        setImageUrl(process.env.REACT_APP_S3_IMAGE_URL + response.data.Item.image)
+      })
+    }
+    else{
+      setId(uuidv4());
+    }
+  }, [articleId])
 
-  const params = {
+  const handleFileInput = (e) => setSelectedFile(e.target.files[0]);
+  const onTitleChange = (e) => setTitle(e.target.value);
+  const onDescriptionChange = (e) => setDescription(e.target.value);
+
+  function uploadFileAndSubmit() {
+    console.log('title', title)
+    console.log('description', description)
+    console.log('selectedFile', selectedFile)
+    if(title && description && selectedFile) {
+      uploadFile();
+    }
+    else {
+      console.log('form error')
+    }
+  }
+
+  function uploadFile () {
+
+    const params = {
       ACL: 'public-read',
-      Body: file,
+      Body: selectedFile,
       Bucket: S3_BUCKET,
-      Key: file.name
-  };
+      Key: selectedFile.name
+    };
 
-  myBucket.putObject(params)
+    myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
-          setLoadingState(true)
-          setProgress(Math.round((evt.loaded / evt.total) * 100))
-          console.log('evt', evt)
+        setLoadingState(true)
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+        console.log('evt', evt)
       })
       .on('success', (response) => {
         setLoadingState(false)
+        const editData = {
+          id,
+          title,
+          description,
+          image: selectedFile.name,
+          date: Math.round(Date.now() / 1000)
+        }
+        console.log('editData: ', editData)
+        
+        console.log(baseURL + 'article')
+        axios.put(baseURL + 'article', editData).then((response) => {
+          navigate('/');
+        });
       })
       .send((err) => {
-          if (err) console.log(err)
+        if (err) console.log(err)
       })
   }
 
@@ -90,6 +138,8 @@ const uploadFile = (file) => {
                 label="Title"
                 fullWidth
                 color="primary"
+                value={title}
+                onChange={onTitleChange}
               />
             </Grid>
             <Grid item xs={8}>
@@ -100,15 +150,21 @@ const uploadFile = (file) => {
                 rows={4}
                 fullWidth
                 color="primary"
+                value={description}
+                onChange={onDescriptionChange}
               />
             </Grid>
-            <Grid container item spacing={4} 
+            <Grid 
+              container 
+              item 
+              xs={8} 
+              spacing={4} 
               alignItems="center"
-              justifyContent="center">
-              <Grid item xs={1}>
-                <ImageIcon fontSize="large" color="primary"/>
+            >
+              <Grid item xs={2} mr={2}>
+                {imageUrl ? <img src={imageUrl} width='100' /> : <ImageIcon fontSize="large" color="primary"/>}
               </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={6}>
                 <TextField
                   label="Image"
                   InputProps={{
@@ -118,6 +174,9 @@ const uploadFile = (file) => {
                       </InputAdornment>
                     )
                   }}
+                  fullWidth
+                  disabled
+                  color="primary"
                 />
               </Grid>
              </Grid>     
@@ -137,7 +196,7 @@ const uploadFile = (file) => {
                 loading = {loadingState}
                 loadingIndicator={progress + '%'}
                 sx={{backgroundColor: "#76b900"}} 
-                onClick={() => uploadFile(selectedFile)}
+                onClick={uploadFileAndSubmit}
               >Submit</LoadingButton>
             </Grid>
             <Grid item xs={4} >
@@ -146,7 +205,6 @@ const uploadFile = (file) => {
           </Grid>
         </Paper>
       </Grid>
-    </Grid>
- 
+    </Grid> 
   );
 }
