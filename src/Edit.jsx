@@ -37,6 +37,7 @@ export default function Edit() {
   const [loadingState, setLoadingState] = useState(false);
   const [progress , setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState('');
+  const [image, setImage] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
@@ -45,14 +46,12 @@ export default function Edit() {
   }, [])
 
   useEffect(() => {
-    console.log('articleId: ', articleId);
     if(articleId){
-      console.log('fetching article ', articleId);
       axios.get(baseURL + 'article/' + articleId).then((response) => {
-        console.log('response,', response.data);
         setId(response.data.Item.id);
         setTitle(response.data.Item.title);
         setDescription(response.data.Item.description);
+        setImage(response.data.Item.image);
         setImageUrl(process.env.REACT_APP_S3_IMAGE_URL + response.data.Item.image)
       })
     }
@@ -66,14 +65,15 @@ export default function Edit() {
   const onDescriptionChange = (e) => setDescription(e.target.value);
 
   function uploadFileAndSubmit() {
-    console.log('title', title)
-    console.log('description', description)
-    console.log('selectedFile', selectedFile)
     if(title && description && selectedFile) {
+      setImage(selectedFile.name);
       uploadFile();
     }
+    else if (title && description && image) {
+      updateArticle();
+    }
     else {
-      console.log('form error')
+      alert('Oops! Missing data in form fields. TODO: Update form validation')
     }
   }
 
@@ -83,36 +83,36 @@ export default function Edit() {
       ACL: 'public-read',
       Body: selectedFile,
       Bucket: S3_BUCKET,
-      Key: selectedFile.name
+      Key: image
     };
 
     myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
         setLoadingState(true)
         setProgress(Math.round((evt.loaded / evt.total) * 100))
-        console.log('evt', evt)
       })
       .on('success', (response) => {
         setLoadingState(false)
-        const editData = {
-          id,
-          title,
-          description,
-          image: selectedFile.name,
-          date: Math.round(Date.now() / 1000)
-        }
-        console.log('editData: ', editData)
-        
-        console.log(baseURL + 'article')
-        axios.put(baseURL + 'article', editData).then((response) => {
-          navigate('/');
-        });
+        updateArticle();
       })
       .send((err) => {
         if (err) console.log(err)
       })
   }
 
+  function updateArticle() {
+    const editData = {
+      id,
+      title,
+      description,
+      image,
+      date: Math.round(Date.now() / 1000)
+    }
+    axios.put(baseURL + 'article', editData).then((response) => {
+      navigate('/');
+    });
+  }
+ 
   return (
       <Grid container alignItems="center"
       justifyContent="center" pt={3}>
@@ -200,7 +200,7 @@ export default function Edit() {
               >Submit</LoadingButton>
             </Grid>
             <Grid item xs={4} >
-              <Button variant="outlined" component={Link} to={'/admin'}>Cancel</Button>
+              <Button variant="outlined" component={Link} to={'/'}>Cancel</Button>
             </Grid>
           </Grid>
         </Paper>

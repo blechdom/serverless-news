@@ -48,7 +48,15 @@ export default function Home() {
             console.log('article id ', article.id);
             
             return (
-              <Grid item xs={4} key={article.id}>
+              <Grid 
+                item 
+                xs={12} 
+                sm={12} 
+                md={6} 
+                lg={4} 
+                xl={3} 
+                key={article.id} 
+              >
               <Article
                 role={'admin'}
                 key={article.id}
