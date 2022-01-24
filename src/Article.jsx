@@ -31,7 +31,7 @@ export default function Article({role, article}) {
           <AdminCardActions 
             viewed={false}
             articleId={article.id} 
-            role="user" 
+            role={role} 
             title={article.title}
             description={article.description}
             image={article.image}

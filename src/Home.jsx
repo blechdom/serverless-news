@@ -10,18 +10,16 @@ import Article from './Article';
 
 const baseURL = process.env.REACT_APP_DYNAMO_DB_URL
 
-export default function Home() {
-  const [role, setRole] = useState('');
+export default function Home({getRole}) {
   const [articles, setArticles] = useState([]);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
-    setRole('admin')
+    setRole(getRole())
     axios.get(baseURL + 'articles').then((response) => {
-      console.log('response,', response.data.Items);
       setArticles(response.data.Items);
     });
   }, []);
-
 
   if (!articles) return null;
 
@@ -45,8 +43,6 @@ export default function Home() {
         }
         <Grid container item xs={12} spacing={3}>
           {articles.map((article) => {
-            console.log('article id ', article.id);
-            
             return (
               <Grid 
                 item 
@@ -58,7 +54,7 @@ export default function Home() {
                 key={article.id} 
               >
               <Article
-                role={'admin'}
+                role={role}
                 key={article.id}
                 article={article}
               />

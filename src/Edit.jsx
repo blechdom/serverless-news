@@ -1,12 +1,19 @@
 import {useEffect, useState} from 'react';
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
-
 import AWS from 'aws-sdk'
 
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
-import { Paper, Button, Grid, InputAdornment, TextField, Typography, getImageListItemBarUtilityClass } from '@mui/material';
+import { 
+  Paper, 
+  Button, 
+  Grid, 
+  InputAdornment, 
+  TextField, 
+  Typography
+} from '@mui/material';
+
 import LoadingButton from '@mui/lab/LoadingButton';
 import ImageIcon from '@mui/icons-material/AddPhotoAlternate';
 
@@ -60,14 +67,15 @@ export default function Edit() {
     }
   }, [articleId])
 
-  const handleFileInput = (e) => setSelectedFile(e.target.files[0]);
-  const onTitleChange = (e) => setTitle(e.target.value);
-  const onDescriptionChange = (e) => setDescription(e.target.value);
+  useEffect (() => {
+    if(title && description && selectedFile && image) {
+      uploadFile();   
+    }
+  }, [image])
 
   function uploadFileAndSubmit() {
     if(title && description && selectedFile) {
       setImage(selectedFile.name);
-      uploadFile();
     }
     else if (title && description && image) {
       updateArticle();
@@ -85,7 +93,6 @@ export default function Edit() {
       Bucket: S3_BUCKET,
       Key: image
     };
-
     myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
         setLoadingState(true)
@@ -108,7 +115,7 @@ export default function Edit() {
       image,
       date: Math.round(Date.now() / 1000)
     }
-    axios.put(baseURL + 'article', editData).then((response) => {
+    axios.put(baseURL + 'article', editData).then(() => {
       navigate('/');
     });
   }
@@ -139,7 +146,7 @@ export default function Edit() {
                 fullWidth
                 color="primary"
                 value={title}
-                onChange={onTitleChange}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Grid>
             <Grid item xs={8}>
@@ -151,7 +158,7 @@ export default function Edit() {
                 fullWidth
                 color="primary"
                 value={description}
-                onChange={onDescriptionChange}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </Grid>
             <Grid 
@@ -170,7 +177,7 @@ export default function Edit() {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <input type="file" onChange={handleFileInput}/>
+                        <input type="file" onChange={(e) => setSelectedFile(e.target.files[0])}/>
                       </InputAdornment>
                     )
                   }}

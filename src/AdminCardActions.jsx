@@ -23,11 +23,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import OpenIcon from '@mui/icons-material/OpenInNew';
-import NewIcon from '@mui/icons-material/FiberNew';
+//import NewIcon from '@mui/icons-material/FiberNew';
 
 const baseURL = process.env.REACT_APP_DYNAMO_DB_URL
 
-export default function AdminCardActions({ role, articleId, viewed, title, description, image, date }) {
+export default function AdminCardActions({ 
+  role, 
+  articleId, 
+  viewed, 
+  title, 
+  description, 
+  image, 
+  date
+}) {
+
   const [open, setOpen] = useState(false);
   const [openArticle, setOpenArticle] = useState(false);
 
@@ -48,7 +57,6 @@ export default function AdminCardActions({ role, articleId, viewed, title, descr
   };
 
   const handleOpenArticle = () => {
-    console.log('open article')
     setOpenArticle(true);
     //TODO: set article has been viewed
     /*axios.put(baseURL + 'article/' + article.id, {}).then((response) => {
@@ -62,23 +70,21 @@ export default function AdminCardActions({ role, articleId, viewed, title, descr
 
   return (
     <>  
-     <IconButton onClick={handleOpenArticle}>
+      <IconButton onClick={handleOpenArticle}>
         <OpenIcon style={{fill: "#76b900" }}/>
       </IconButton>
-    {role==='admin' && <>
-      <IconButton 
-        component={Link} 
-        to={'/edit?articleId=' + articleId}
-      >
-        <EditIcon style={{fill: "#76b900" }} />
-      </IconButton>
-      <IconButton onClick={handleDeleteAlert}>
-        <DeleteIcon style={{fill: "#76b900" }}/>
-      </IconButton>
-    </>}
-    { !viewed &&
-      <NewIcon style={{fill: "#76b900" }}/>
-}
+      {role==='admin' && <>
+        <IconButton 
+          component={Link} 
+          to={'/edit?articleId=' + articleId}
+        >
+          <EditIcon style={{fill: "#76b900" }} />
+        </IconButton>
+        <IconButton onClick={handleDeleteAlert}>
+          <DeleteIcon style={{fill: "#76b900" }}/>
+        </IconButton>
+      </>}
+      {/* !viewed && <NewIcon style={{fill: "#76b900" }}/> */ }
       <Dialog
         open={open}
         onClose={handleClose}
@@ -103,7 +109,7 @@ export default function AdminCardActions({ role, articleId, viewed, title, descr
         onClose={handleCloseArticle}
       >
         <Card sx={{ maxWidth: 500, minWidth: 500 }}>
-        <CardHeader 
+          <CardHeader 
             title={title} 
             titleTypographyProps={{ variant: "h5", color: "primary", fontWeight: 900, alignItems: "top" }}
             action={

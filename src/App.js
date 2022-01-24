@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +15,19 @@ import Navbar from "./Navbar";
 
 import './App.css';
 
+function setRole(role) {
+  console.log('setting role to: ', role);
+  sessionStorage.setItem('role', role);
+}
+
+function getRole() {
+  console.log('role in session is: ', sessionStorage.getItem('role'));
+  return sessionStorage.getItem('role');
+}
+
 export default function App() {
+
+  const role = getRole();
 
   const font = "'Red Hat Display', sans-serif";
   const theme = createTheme({
@@ -32,15 +45,22 @@ export default function App() {
     }
   });
 
+  useEffect(() => {
+    console.log('in app:', role)
+    if(role == 'user'){
+     //window.location.href = '/'
+    } 
+  }, [role])
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Navbar />
+        <Navbar getRole={getRole}/>
         <Box p={3} sx={{ backgroundColor:"secondary.main"}}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home getRole={getRole}/>} />
             <Route path="/edit" element={ <Edit />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setRole={setRole} />} />
           </Routes>
         </Box>
       </Router>
