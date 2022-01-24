@@ -50,7 +50,7 @@ export default function Edit() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     setArticleId(queryParams.get('articleId'));
-  }, [])
+  }, [location.search])
 
   useEffect(() => {
     if(articleId){
@@ -71,7 +71,7 @@ export default function Edit() {
     if(title && description && selectedFile && image) {
       uploadFile();   
     }
-  }, [image])
+  }, [title, image, description, selectedFile])
 
   function uploadFileAndSubmit() {
     if(title && description && selectedFile) {
@@ -169,7 +169,7 @@ export default function Edit() {
               alignItems="center"
             >
               <Grid item xs={2} mr={2}>
-                {imageUrl ? <img src={imageUrl} width='100' /> : <ImageIcon fontSize="large" color="primary"/>}
+                {imageUrl ? <img src={imageUrl} width='100' alt='upload preview' /> : <ImageIcon fontSize="large" color="primary"/>}
               </Grid>
               <Grid item xs={6}>
                 <TextField

@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,8 +26,6 @@ function getRole() {
 
 export default function App() {
 
-  const role = getRole();
-
   const font = "'Red Hat Display', sans-serif";
   const theme = createTheme({
     palette: {
@@ -44,13 +41,6 @@ export default function App() {
       textTransform: "none"
     }
   });
-
-  useEffect(() => {
-    console.log('in app:', role)
-    if(role == 'user'){
-     //window.location.href = '/'
-    } 
-  }, [role])
 
   return (
     <ThemeProvider theme={theme}>

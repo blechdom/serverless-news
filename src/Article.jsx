@@ -17,9 +17,8 @@ export default function Article({role, article}) {
   useEffect(() => {
     let d = new Date(0); 
     d.setUTCSeconds(article.date);
-    console.log('new date ', d.toDateString());
     setArticleDate(d.toDateString().split(' ').slice(1).join(' '));  
-  }, []);
+  }, [article.date]);
 
   return (
     <>
