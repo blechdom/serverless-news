@@ -118,7 +118,7 @@ export default function Edit() {
     axios.put(baseURL + 'article', editData).then(() => {
       navigate('/');
     });
-  }
+  }//add for trigger
  
   return (
       <Grid container alignItems="center"
