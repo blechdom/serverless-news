@@ -6,11 +6,11 @@ http://hellobluegoose.com
 ### Login
 http://hellobluegoose.com/login
 
-#### User Credentials
+#### User Credentials (to see 'article viewed' feature)
     email: user@hellobluegoose.com
     password: userPassword
 
-#### Admin Credentials
+#### Admin Credentials (to see 'new/edit article' features)
     email: admin@hellobluegoose.com
     password: adminPassword
 
