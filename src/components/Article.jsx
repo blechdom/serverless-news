@@ -22,21 +22,17 @@ export default function Article({role, article}) {
 
   return (
     <>
-    <Card sx={{ maxWidth: 345, minWidth: 345, maxHeight: 450, minHeight: 450}}>
+    <Card sx={{ maxWidth: 345, minWidth: 345, maxHeight: 460, minHeight: 460}}>
       <CardHeader 
         title={article.title} 
         titleTypographyProps={{ variant: "h5", color: "primary", fontWeight: 900, alignItems: "top" }}
         action={
           <AdminCardActions 
-            viewed={false}
-            articleId={article.id} 
-            role={role} 
-            title={article.title}
-            description={article.description}
-            image={article.image}
+            article={article} 
+            role={role}
             date={articleDate}
           />}
-        sx={{ maxHeight: 80, minHeight: 80 }}
+        sx={{ maxHeight: 90, minHeight: 90 }}
       />
       <CardMedia
         component="img"

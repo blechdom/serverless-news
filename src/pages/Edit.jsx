@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import AWS from 'aws-sdk'
@@ -86,7 +86,6 @@ export default function Edit() {
   }
 
   function uploadFile () {
-
     const params = {
       ACL: 'public-read',
       Body: selectedFile,
@@ -113,6 +112,7 @@ export default function Edit() {
       title,
       description,
       image,
+      viewed: false,
       date: Math.round(Date.now() / 1000)
     }
     axios.put(baseURL + 'article', editData).then(() => {

@@ -23,17 +23,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import OpenIcon from '@mui/icons-material/OpenInNew';
-//import NewIcon from '@mui/icons-material/FiberNew';
+import NewIcon from '@mui/icons-material/FiberNew';
 
 const baseURL = process.env.REACT_APP_DYNAMO_DB_URL
 
 export default function AdminCardActions({ 
   role, 
-  articleId, 
-  viewed, 
-  title, 
-  description, 
-  image, 
+  article,
   date
 }) {
 
@@ -51,17 +47,19 @@ export default function AdminCardActions({
 
   const handleCloseAndDelete = () => {
     setOpen(false);
-    axios.delete(baseURL + 'article/' + articleId).then((response) => {
+    axios.delete(baseURL + 'article/' + article.id).then((response) => {
       window.location.reload();
     });
   };
 
   const handleOpenArticle = () => {
     setOpenArticle(true);
-    //TODO: set article has been viewed
-    /*axios.put(baseURL + 'article/' + article.id, {}).then((response) => {
-      window.location.reload();
-    });*/
+    if(role==='user'){
+      article.viewed = true;
+      axios.put(baseURL + 'article', article).then((response) => {
+        console.log('article updated', article)
+      });
+    }
   };
 
   const handleCloseArticle = () => {
@@ -76,7 +74,7 @@ export default function AdminCardActions({
       {role==='admin' && <>
         <IconButton 
           component={Link} 
-          to={'/edit?articleId=' + articleId}
+          to={'/edit?articleId=' + article.id}
         >
           <EditIcon style={{fill: "#76b900" }} />
         </IconButton>
@@ -84,10 +82,11 @@ export default function AdminCardActions({
           <DeleteIcon style={{fill: "#76b900" }}/>
         </IconButton>
       </>}
-      {/* !viewed && <NewIcon style={{fill: "#76b900" }}/> */ }
+      {role==='user' && !article.viewed && <NewIcon style={{fill: "#76b900" }}/> }
       <Dialog
         open={open}
         onClose={handleClose}
+        scroll='paper'
       >
         <DialogTitle id="alert-dialog-title">
           {"Deleting Article"}
@@ -107,10 +106,12 @@ export default function AdminCardActions({
       <Dialog
         open={openArticle}
         onClose={handleCloseArticle}
+        scroll='paper'
       >
-        <Card sx={{ maxWidth: 500, minWidth: 500 }}>
+        <DialogContent dividers={true}>
+        <Card sx={{ maxWidth: 500, minWidth: 500, height: '100%' }}>
           <CardHeader 
-            title={title} 
+            title={article.title} 
             titleTypographyProps={{ variant: "h5", color: "primary", fontWeight: 900, alignItems: "top" }}
             action={
               <IconButton onClick={handleCloseArticle}>
@@ -121,15 +122,16 @@ export default function AdminCardActions({
           <CardMedia
             component="img"
             width="500"
-            image= {process.env.REACT_APP_S3_IMAGE_URL + image}
+            image= {process.env.REACT_APP_S3_IMAGE_URL + article.image}
           />
           <CardContent>
-            <Typography variant="subtitle2" color="primary">{description}</Typography>
+            <Typography variant="subtitle2" color="primary">{article.description}</Typography>
           </CardContent>
           <CardActions>
             <Typography variant="caption" color="#AAA" sx={{ maxHeight: 30, minHeight: 30 }} m={1}>{date}</Typography>
           </CardActions>
         </Card>
+        </DialogContent>
       </Dialog>
     </>
   )

@@ -7,10 +7,10 @@ import {
 import { Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Edit from "./Edit";
-import Home from "./Home";
-import Login from "./Login";
-import Navbar from "./Navbar";
+import Edit from "./pages/Edit";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
 
 import './App.css';
 

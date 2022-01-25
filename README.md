@@ -29,6 +29,7 @@ http://hellobluegoose.com/login
 
 ### Pain Points / Self-Critique
 * AWS CORS issues between API Gateway, Lambda Proxy and React App
-* Not having enough time to tweak the front-end
+* Front-end needs more tweaking
 * Lack of authentication security
+* Chinsy 'viewed' implementation
 * Only time for a couple tests

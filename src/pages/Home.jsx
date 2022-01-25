@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 
 import { Box, Button, Grid } from '@mui/material';
@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { Link } from "react-router-dom";
 
-import Article from './Article';
+import Article from '../components/Article';
 
 const baseURL = process.env.REACT_APP_DYNAMO_DB_URL
 
