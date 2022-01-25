@@ -6,11 +6,11 @@ http://hellobluegoose.com
 ### Login
 http://hellobluegoose.com/login
 
-#### User Credentials
+#### User Credentials (to see 'article viewed' feature)
     email: user@hellobluegoose.com
     password: userPassword
 
-#### Admin Credentials
+#### Admin Credentials (to see 'new/edit article' features)
     email: admin@hellobluegoose.com
     password: adminPassword
 
@@ -29,7 +29,7 @@ http://hellobluegoose.com/login
 
 ### Pain Points / Self-Critique
 * AWS CORS issues between API Gateway, Lambda Proxy and React App
-* Front-end needs more tweaking
-* Lack of authentication security
-* Chinsy 'viewed' implementation
-* Only time for a couple tests
+* Time need for additional Front-end tweaks
+* Lack of security for login/authentication
+* Cheap implementation of 'viewed article' feature
+* Only a few tests
