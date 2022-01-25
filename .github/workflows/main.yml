@@ -40,22 +40,21 @@ jobs:
         run: |
           unset CI
           npm run build
-          
-      - name: Deploy to S3 Server
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.REACT_APP_S3_BUCKET_REGION }}
-          SOURCE_DIR: "build"
           REACT_APP_S3_BUCKET_NAME: ${{ secrets.REACT_APP_S3_BUCKET_NAME }}
           REACT_APP_S3_BUCKET_REGION: ${{ secrets.REACT_APP_S3_BUCKET_REGION }}
           REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
           REACT_APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
           REACT_APP_DYNAMO_DB_URL: ${{ secrets.REACT_APP_DYNAMO_DB_URL }}
           REACT_APP_S3_IMAGE_URL: ${{ secrets.REACT_APP_S3_IMAGE_URL }}
-
-      
+          
+      - name: Deploy to S3 Server
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.REACT_APP_S3_BUCKET_REGION }}
+          SOURCE_DIR: "build"
