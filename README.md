@@ -24,7 +24,7 @@ http://hellobluegoose.com/login
 * Lambda Proxy
 * API Gateway
 * Route53 DNS
-* Github CI/CD
+* Github Actions for CI/CD
 * Jest
 
 ### Pain Points / Self-Critique
