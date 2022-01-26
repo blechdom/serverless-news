@@ -15,12 +15,10 @@ import Navbar from "./components/Navbar";
 import './App.css';
 
 function setRole(role) {
-  console.log('setting role to: ', role);
   sessionStorage.setItem('role', role);
 }
 
 function getRole() {
-  console.log('role in session is: ', sessionStorage.getItem('role'));
   return sessionStorage.getItem('role');
 }
 
