@@ -32,5 +32,5 @@ http://hellobluegoose.com/login
 * Time needed for additional Front-end tweaks
 * Lack of security for login/authentication
 * Cheap implementation of 'viewed article' feature
-* Only a few tests
+* Only a few tests 
 * HTTP not HTTPS, still 'pending validation' from AWS Certificate Manager for SSL
