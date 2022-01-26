@@ -57,7 +57,7 @@ export default function AdminCardActions({
     if(role==='user'){
       article.viewed = true;
       axios.put(baseURL + 'article', article).then((response) => {
-        console.log('article updated', article)
+        console.log('article updated', response)
       });
     }
   };
